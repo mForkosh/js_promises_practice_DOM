@@ -10,34 +10,39 @@ const firstPromise = new Promise((resolve, reject) => {
 });
 
 const secondPromise = new Promise((resolve, reject) => {
-  document.documentElement.addEventListener('click', () => {
-    resolve('Second promise was resolved');
+  const a = new Promise((resolve) => {
+    document.documentElement.addEventListener('click', () => {
+      resolve();
+    });
   });
 
-  document.documentElement.addEventListener('contextmenu', () => {
-    resolve('Second promise was resolved');
+  const b = new Promise((resolve) => {
+    document.documentElement.addEventListener('contextmenu', () => {
+      resolve();
+    });
   });
+
+  const result = Promise.race([a, b]);
+
+  result.finally(() => resolve('Second promise was resolved'));
 });
 
 const thirdPromise = new Promise((resolve, reject) => {
-  let leftClick = false;
-  let rightClick = false;
-
-  document.documentElement.addEventListener('click', () => {
-    leftClick = true;
-
-    if (leftClick && rightClick) {
-      resolve('Third promise was resolved');
-    }
+  const a = new Promise((resolve) => {
+    document.documentElement.addEventListener('click', () => {
+      resolve();
+    });
   });
 
-  document.documentElement.addEventListener('contextmenu', () => {
-    rightClick = true;
-
-    if (leftClick && rightClick) {
-      resolve('Third promise was resolved');
-    }
+  const b = new Promise((resolve) => {
+    document.documentElement.addEventListener('contextmenu', () => {
+      resolve();
+    });
   });
+
+  const result = Promise.all([a, b]);
+
+  result.finally(() => resolve('Third promise was resolved'));
 });
 
 function success(message) {
@@ -60,15 +65,15 @@ function error(message) {
 
 firstPromise.then(
   (successMessage) => success(successMessage),
-  (errorMesage) => error(errorMesage),
+  (errorMessage) => error(errorMessage),
 );
 
 secondPromise.then(
   (successMessage) => success(successMessage),
-  (errorMesage) => error(errorMesage),
+  (errorMessage) => error(errorMessage),
 );
 
 thirdPromise.then(
   (successMessage) => success(successMessage),
-  (errorMesage) => error(errorMesage),
+  (errorMessage) => error(errorMessage),
 );
