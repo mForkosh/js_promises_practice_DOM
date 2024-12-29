@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 'use strict';
 
 const firstPromise = new Promise((resolve, reject) => {
